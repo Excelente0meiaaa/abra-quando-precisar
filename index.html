@@ -5,9 +5,45 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Abra quando precisar 💌</title>
 <style>
+ .player-musica {
+  margin: 18px auto;
+  padding: 16px;
+  max-width: 340px;
+  text-align: center;
+  background: #f5eee4;
+  border: 1px solid #d9cbbb;
+  border-radius: 18px;
+  color: #526b59;
+}
+
+.player-musica span {
+  display: block;
+  margin-bottom: 12px;
+}
+
+#botaoMusica {
+  border: none;
+  border-radius: 25px;
+  padding: 10px 16px;
+  background: #819783;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+ 
 *{box-sizing:border-box}
 body{margin:0;background:#fffaf2;color:#514f46;font-family:Georgia,serif}
 header{text-align:center;padding:38px 18px;background:linear-gradient(135deg,#f5ead9,#f9e7eb)}
+ <div class="player-musica">
+  <span>🎧 Um lo-fi para a 0meiaa estudar</span>
+  <button id="botaoMusica" type="button">
+    ▶ Tocar musiquinha
+  </button>
+  <audio id="musica" loop>
+    <source src="musica-lofi.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
 header h1{color:#405744;font-size:35px}
 header p{line-height:1.8}
 main{max-width:850px;margin:auto;padding:22px 14px}
@@ -67,6 +103,24 @@ Seu valor não depende de uma prova, de uma nota ou de um dia produtivo. ♡
 </div>
 </div>
 
+ 
+const musica = document.getElementById("musica");
+const botaoMusica = document.getElementById("botaoMusica");
+
+botaoMusica.addEventListener("click", async () => {
+  if (musica.paused) {
+    try {
+      await musica.play();
+      botaoMusica.textContent = "⏸ Pausar musiquinha";
+    } catch (erro) {
+      botaoMusica.textContent = "Não consegui tocar 😅";
+    }
+  } else {
+    musica.pause();
+    botaoMusica.textContent = "▶ Tocar musiquinha";
+  }
+});
+ 
 <script>
 const cartas = [
 {c:"Coração",e:"🫂",t:"Quando se sentir insuficiente",m:"Ei, respira um pouquinho.\n\nVocê não precisa acertar tudo, dar conta de tudo ou ser forte o tempo inteiro. Seu valor não é uma nota, uma prova ou a quantidade de páginas estudadas.\n\nVocê é uma pessoa, não uma máquina de produtividade. Até máquina precisa de manutenção, imagina a gente! 😂\n\nSe hoje você não consegue enxergar suas qualidades, isso não significa que elas desapareceram. Seja gentil consigo mesma.",v:"Salmos 139:14 — Você foi criada de modo especial e admirável."},
