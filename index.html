@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abra quando precisar 💌</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#fffaf2;color:#514f46;font-family:Georgia,serif}
+header{text-align:center;padding:38px 18px;background:linear-gradient(135deg,#f5ead9,#f9e7eb)}
+header h1{color:#405744;font-size:35px}
+header p{line-height:1.8}
+main{max-width:850px;margin:auto;padding:22px 14px}
+.intro{text-align:center;line-height:1.9}
+#filtros{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:22px 0}
+button{cursor:pointer}
+.filtro{border:1px solid #d8cbb7;border-radius:22px;padding:10px;background:white;color:#405744}
+.filtro.ativo{background:#788d75;color:white}
+#grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.envelope{padding:18px 8px;min-height:130px;border-radius:10px;background:#fffdf8;border:1px solid #e3d2b8;color:#405744;font-family:Georgia,serif}
+.emoji{display:block;font-size:30px;margin-bottom:9px}
+.nome{font-weight:bold;line-height:1.5}
+.dica{display:block;font-size:11px;color:#9b8b79;margin-top:8px}
+.surpresa{display:block;margin:25px auto;padding:14px 20px;background:#405744;color:white;border:0;border-radius:24px}
+footer{text-align:center;padding:25px;background:#f5ead9;line-height:1.8;color:#405744}
+#modal{display:none;position:fixed;inset:0;background:#26372bd9;z-index:10;padding:15px;align-items:center;justify-content:center}
+#modal.aberto{display:flex}
+#carta{background:#fffaf2;padding:25px 20px;border-radius:12px;width:100%;max-width:460px;max-height:85vh;overflow:auto;position:relative}
+#fechar{position:absolute;right:12px;top:10px;border:0;background:transparent;font-size:23px}
+#titulo{text-align:center;color:#405744;margin:30px 0 20px}
+#mensagem{white-space:pre-line;line-height:1.9}
+#versiculo{margin-top:20px;padding:14px;background:#edf1e9;border-radius:8px;line-height:1.7;font-size:14px}
+@media(min-width:600px){#grade{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header>
+<p>♡ UM CARINHO GUARDADO PARA VOCÊ ♡</p>
+<h1>Abra quando precisar 💌</h1>
+<p>Cartinhas para os dias bons, os dias difíceis e todos os momentos entre eles.</p>
+</header>
+
+<main>
+<p class="intro">
+Oi, você! 🌷<br>
+Escolha um envelope e abra quando precisar.<br>
+Tem carinho, fé, brincadeiras e lembretes importantes.
+</p>
+<div id="filtros"></div>
+<div id="grade"></div>
+<button class="surpresa" onclick="aleatorio()">🎁 Escolher um envelope surpresa</button>
+</main>
+
+<footer>
+<strong>Um passo de cada vez também é caminho.</strong><br>
+Seu valor não depende de uma prova, de uma nota ou de um dia produtivo. ♡
+</footer>
+
+<div id="modal">
+<div id="carta">
+<button id="fechar" onclick="fechar()">✕</button>
+<div id="emojiCarta" style="text-align:center;font-size:38px">💌</div>
+<h2 id="titulo"></h2>
+<div id="mensagem"></div>
+<div id="versiculo"></div>
+<p style="text-align:right;color:#b17d85;font-style:italic">Com carinho, para você. ♡</p>
+</div>
+</div>
+
+<script>
+const cartas = [
+{c:"Coração",e:"🫂",t:"Quando se sentir insuficiente",m:"Ei, respira um pouquinho.\n\nVocê não precisa acertar tudo, dar conta de tudo ou ser forte o tempo inteiro. Seu valor não é uma nota, uma prova ou a quantidade de páginas estudadas.\n\nVocê é uma pessoa, não uma máquina de produtividade. Até máquina precisa de manutenção, imagina a gente! 😂\n\nSe hoje você não consegue enxergar suas qualidades, isso não significa que elas desapareceram. Seja gentil consigo mesma.",v:"Salmos 139:14 — Você foi criada de modo especial e admirável."},
+{c:"Coração",e:"🌱",t:"Quando achar que não está evoluindo",m:"Nem todo crescimento é visível.\n\nÀs vezes, você está evoluindo quando percebe um erro que antes nem notava. Uma questão errada não apaga tudo o que aprendeu.\n\nNão compare seu capítulo 3 com o capítulo 20 de outra pessoa. Continue no seu ritmo, uma questão e uma página de cada vez.\n\nPequenos passos também levam a lugares grandes. 💚",v:"Zacarias 4:10 — Não despreze os pequenos começos."},
+{c:"Coração",e:"🌿",t:"Quando a ansiedade apertar",m:"Vamos pausar um pouquinho?\n\nSolte os ombros. Respire devagar. Você não precisa resolver o futuro inteiro hoje.\n\nSentir medo não faz de você incapaz. Descansar não é desistir. Pedir ajuda não é fraqueza.\n\nCuide apenas do próximo passo. Se a ansiedade estiver pesando muito, conversar com alguém de confiança também é uma forma de cuidado.",v:"Filipenses 4:6-7 — Apresente suas preocupações a Deus e busque a paz."},
+{c:"Coração",e:"🪞",t:"Quando se comparar com os outros",m:"Você está vendo os resultados dos outros e talvez se esquecendo dos seus próprios esforços.\n\nA conquista de outra pessoa não diminui seu valor nem determina seu futuro.\n\nCada um tem seu tempo, suas dificuldades e sua caminhada. Você não está em uma corrida contra todo mundo.\n\nE pare de fiscalizar a velocidade alheia como se fosse agente do Detran dos concursos. 😂",v:"Eclesiastes 3:1 — Tudo tem o seu tempo determinado."},
+{c:"Estudos",e:"📚",t:"Quando não conseguir estudar",m:"Hoje está difícil? Vamos diminuir o tamanho da missão.\n\nEm vez de exigir cinco horas perfeitas, tente começar com quinze minutos. Uma página. Uma questão. Uma pequena revisão.\n\nSe nem isso for possível hoje, descanse e tente novamente quando conseguir. Um dia difícil não define sua capacidade.\n\nVocê não precisa esperar a motivação chegar de limousine para começar. Às vezes ela vem de ônibus atrasado mesmo. 😂",v:"Mateus 11:28 — Jesus convida os cansados a encontrarem descanso."},
+{c:"Estudos",e:"📝",t:"Quando errar muitas questões",m:"Errar não é gostoso. Ninguém acorda pensando: oba, hoje vou colecionar erros! KKKKK.\n\nMas cada erro pode mostrar onde vale a pena estudar mais. Você não precisa saber tudo agora; está justamente estudando para aprender.\n\nCorrija com calma, entenda o motivo e siga. Uma questão errada é informação, não uma sentença sobre sua inteligência.",v:"Provérbios 24:16 — O justo pode cair e tornar a levantar-se."},
+{c:"Estudos",e:"⏳",t:"Quando achar que está atrasada",m:"Você não precisa recuperar toda a vida em um único dia.\n\nFaça um plano possível, priorize o que importa e siga um pouco por vez. Um cronograma impossível só transforma o estudo em uma fábrica de culpa.\n\nMelhor um progresso constante e humano do que uma rotina perfeita que só existe no papel.",v:"Eclesiastes 3:1 — Há um tempo para cada propósito."},
+{c:"Estudos",e:"🎯",t:"Antes de uma prova",m:"Você se preparou como conseguiu, com os recursos e o tempo que tinha.\n\nRespire, leia as questões com atenção e faça uma de cada vez. Não precisa responder ao futuro inteiro dentro da sala de prova.\n\nSeu resultado é importante, mas não é a medida do seu valor como pessoa.\n\nAgora vai lá e mostra o que sabe. Com calma, candidata! 💚",v:"Josué 1:9 — Seja forte e corajosa."},
+{c:"Estudos",e:"🥹",t:"Quando pensar em desistir",m:"Antes de decidir qualquer coisa no meio do cansaço, descanse.\n\nVocê pode ajustar a estratégia, mudar o ritmo, pedir ajuda e recomeçar. Não precisa resolver toda a sua trajetória hoje.\n\nLembre-se de por que começou, mas também lembre-se de que você merece uma caminhada saudável.\n\nUm dia ruim não precisa tomar decisões pelo resto da sua vida.",v:"Gálatas 6:9 — Não nos cansemos de fazer o bem."},
+{c:"Humor",e:"☕",t:"Quando o café não funcionar",m:"COMUNICADO OFICIAL:\n\nO café foi acionado, a água foi ingerida e o cérebro continua carregando em 3%.\n\nFavor aguardar. Estamos tentando reiniciar o sistema sem perder os arquivos de Direito Administrativo.\n\nSe nada funcionar, talvez seja sono mesmo. 😂",v:"Salmos 127:2 — Deus também concede descanso aos seus amados."},
+{c:"Humor",e:"📖",t:"Quando o edital parecer outro idioma",m:"Você abre o edital e encontra uma palavra que parece nome de um planeta desconhecido.\n\nRespira. Divide o conteúdo em partes e pesquisa o que não entendeu.\n\nO edital pode até tentar falar aramaico, mas nós vamos traduzir essa criatura por capítulos. KKKKK.",v:"Provérbios 2:6 — O Senhor concede sabedoria."},
+{c:"Humor",e:"🛋️",t:"Quando a procrastinação vencer",m:"Você foi buscar uma caneta e voltou com água, um biscoito, três pensamentos aleatórios e absolutamente nenhuma caneta.\n\nAcontece. 😂\n\nAgora vamos combinar: cinco minutinhos para organizar tudo e depois uma questão. Sem drama, sem tribunal e sem abrir mais doze abas.",v:"Provérbios 14:23 — O trabalho dedicado produz resultados."},
+{c:"Humor",e:"💧",t:"Quando esquecer de beber água",m:"ALERTA DO SETOR DE HIDRATAÇÃO! 🚨\n\nEsta é uma convocação oficial para beber água.\n\nNão adianta saber toda a Constituição e estar funcionando com 2% de hidratação. Levante, pegue seu copo e volte para essa missão.\n\nAtenciosamente, o departamento imaginário de cuidados. 😂",v:"Cuide de si com carinho e responsabilidade."},
+{c:"Fé",e:"🙏",t:"Quando quiser conversar com Deus",m:"Você não precisa preparar um discurso bonito.\n\nPode falar com Deus do jeito que está: cansada, confusa, agradecida, com medo ou sem saber direito o que dizer.\n\nUma oração sincera não precisa parecer redação de concurso. Pode ser apenas: Senhor, me ajuda a atravessar este dia.\n\nEle conhece seu coração mesmo quando faltam palavras.",v:"Salmos 62:8 — Derrame o coração diante de Deus."},
+{c:"Fé",e:"🕊️",t:"Quando precisar de paz",m:"Talvez você não consiga controlar tudo o que acontece, mas pode procurar um pequeno lugar de paz no meio do dia.\n\nFaça uma pausa, ore se desejar, respire e lembre-se de que você não precisa carregar todas as preocupações sozinha.\n\nA fé pode ser abrigo, não mais uma cobrança para que você nunca sinta medo.",v:"João 14:27 — Jesus oferece sua paz."},
+{c:"Fé",e:"🌅",t:"Quando precisar recomeçar",m:"Um novo começo nem sempre vem acompanhado de uma grande motivação.\n\nÀs vezes, ele começa com um banho, uma oração simples, uma mesa organizada e uma única tarefa concluída.\n\nVocê não precisa apagar o que aconteceu ontem. Pode aprender com ontem e escolher um próximo passo hoje.",v:"Lamentações 3:22-23 — As misericórdias se renovam a cada manhã."},
+{c:"Fé",e:"🌙",t:"Antes de dormir",m:"Por hoje, chega.\n\nVocê não precisa continuar estudando mentalmente enquanto tenta dormir. O descanso também faz parte de uma rotina saudável.\n\nEntregue a Deus aquilo que ficou pendente, solte a culpa pelo que não conseguiu fazer e permita que o amanhã chegue no tempo dele.\n\nBoa noite. Que seu coração encontre sossego. 🌙",v:"Salmos 4:8 — Em paz me deito e logo adormeço."},
+{c:"Carinho",e:"💗",t:"Quando precisar de carinho",m:"Oi, você! Passando para lembrar que sua existência é motivo suficiente para receber carinho.\n\nNão precisa conquistar isso com produtividade, boas notas, favores ou sorrisos o tempo inteiro.\n\nVocê pode simplesmente existir, respirar e receber um pouco de gentileza.\n\nConsidere esta mensagem um abraço demorado. Se não couber na tela, a gente aumenta o tamanho do carinho. 😂💗",v:"Romanos 12:10 — Dediquem-se uns aos outros com amor fraternal."},
+{c:"Carinho",e:"🌷",t:"Quando esquecer suas qualidades",m:"Talvez hoje você esteja prestando atenção demais no que acha que falta.\n\nMas existem coisas bonitas em você que não aparecem em um boletim: seu jeito de se importar, sua sensibilidade, suas tentativas e tantas pequenas atitudes que talvez nem perceba.\n\nVocê não precisa concordar com tudo agora. Só não transforme um momento de insegurança na definição inteira de quem você é.",v:"1 Samuel 16:7 — Deus olha para o coração."},
+{c:"Carinho",e:"🎉",t:"Quando receber uma boa notícia",m:"EEEEEEITA! TEMOS UMA NOTÍCIA BOA! 🎉\n\nPode comemorar, sorrir, agradecer e aproveitar esse momento sem pensar imediatamente na próxima meta.\n\nVocê merece reconhecer suas conquistas, inclusive as pequenas.\n\nHoje não vamos inventar preocupação para ocupar o lugar da alegria. Hoje é dia de comemorar! 😂💚",v:"Salmos 118:24 — Alegremo-nos neste dia."},
+{c:"Surpresa",e:"💌",t:"Só queria te lembrar",m:"Não existe uma grande lição escondida aqui.\n\nSó queria deixar registrado que alguém pensou em você e quis tornar seu dia um pouquinho mais leve.\n\nTalvez você esteja bem e nem precise desta mensagem. Ótimo! Guarde o carinho para quando quiser.\n\nE se o dia estiver complicado, fica aqui este lembrete: você não precisa enfrentar tudo com perfeição.",v:"Romanos 12:10 — Tratem uns aos outros com carinho e honra."},
+{c:"Surpresa",e:"😂",t:"Um aviso muito sério",m:"Esta mensagem é para informar que você está oficialmente proibida de tratar um dia improdutivo como se tivesse cometido um crime federal.\n\nA pena prevista é: beber água, respirar, descansar e tentar de novo quando for possível.\n\nA audiência foi encerrada por falta de provas contra a sua dignidade. KKKKK.",v:"Salmos 23:2 — Deus conduz ao descanso."},
+{c:"Surpresa",e:"🤍",t:"Quando precisar lembrar que não está sozinha",m:"Nem sempre vou saber exatamente o que dizer, e nem sempre vou conseguir resolver o que está acontecendo.\n\nMas quero que você saiba que não precisa fingir estar bem para merecer acolhimento.\n\nSe quiser conversar, desabafar ou apenas falar de qualquer coisa para distrair a cabeça, tudo bem.\n\nVocê não precisa transformar cada sentimento em uma solução imediatamente.",v:"Gálatas 6:2 — Ajudem a carregar os fardos uns dos outros."}
+];
+
+const categorias=["Todos","Coração","Estudos","Humor","Fé","Carinho","Surpresa"];
+let atual="Todos";
+
+function criarFiltros(){
+ const area=document.getElementById("filtros");
+ categorias.forEach(cat=>{
+  const b=document.createElement("button");
+  b.className="filtro"+(cat===atual?" ativo":"");
+  b.textContent=cat==="Todos"?"💌 Todos":cat;
+  b.onclick=()=>{
+   atual=cat;
+   criarFiltros();
+   mostrarCartas();
+  };
+  area.appendChild(b);
+ });
+}
+
+function mostrarCartas(){
+ const area=document.getElementById("grade");
+ area.innerHTML="";
+ cartas.forEach((c,i)=>{
+  if(atual!=="Todos"&&c.c!==atual)return;
+  const b=document.createElement("button");
+  b.className="envelope";
+  b.innerHTML='<span class="emoji">'+c.e+'</span><span class="nome">'+c.t+'</span><span class="dica">Toque para abrir ✉</span>';
+  b.onclick=()=>abrir(i);
+  area.appendChild(b);
+ });
+}
+
+function abrir(i){
+ const c=cartas[i];
+ document.getElementById("emojiCarta").textContent=c.e;
+ document.getElementById("titulo").textContent=c.t;
+ document.getElementById("mensagem").textContent=c.m;
+ document.getElementById("versiculo").textContent="🌿 "+c.v;
+ document.getElementById("modal").classList.add("aberto");
+}
+
+function fechar(){
+ document.getElementById("modal").classList.remove("aberto");
+}
+
+function aleatorio(){
+ const i=Math.floor(Math.random()*cartas.length);
+ abrir(i);
+}
+
+document.getElementById("modal").onclick=function(event){
+ if(event.target===this)fechar();
+};
+
+criarFiltros();
+mostrarCartas();
+</script>
+</body>
+</html>
