@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f5eee3" />
+  <title>Abra quando precisar 💌</title>
+  <style>
+    :root{--paper:#fbf7ef;--cream:#f3eadc;--ink:#4e5145;--sage:#89977c;--sage-dark:#65765c;--pink:#d7a5a4;--rose:#b9797d;--brown:#9a8067;--line:#e5d8c5;--shadow:0 12px 28px rgba(91,73,52,.11)}
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(ellipse at top,#fffaf2 0%,#f3eadc 78%);color:var(--ink);font-family:Georgia,'Times New Roman',serif;min-height:100vh}
+    button{font:inherit;color:inherit}
+    .page{width:min(100%,900px);margin:auto;padding:24px 18px 44px}
+    header{text-align:center;padding:12px 0 8px}
+    .eyebrow{font-family:Arial,sans-serif;text-transform:uppercase;letter-spacing:.2em;font-size:.67rem;color:var(--sage-dark)}
+    h1{font-size:clamp(2rem,7vw,3.1rem);font-weight:normal;margin:10px 0 6px;color:#626d57}
+    .subtitle{font-style:italic;font-size:1rem;color:#927d68;margin:0}
+    .divider{display:flex;align-items:center;gap:12px;justify-content:center;color:var(--pink);margin:19px auto 10px;max-width:280px}
+    .divider:before,.divider:after{content:"";height:1px;background:var(--line);flex:1}
+    .jar-area{display:flex;justify-content:center;margin:10px auto 12px}
+    .jar-button{border:0;background:transparent;cursor:pointer;padding:4px;transition:transform .25s;max-width:300px;width:75%;-webkit-tap-highlight-color:transparent}
+    .jar-button:hover{transform:translateY(-4px) rotate(-1deg)}
+    .jar-button:focus-visible,.envelope:focus-visible,.music-button:focus-visible,.secret-note:focus-visible{outline:3px solid #b7c5a6;outline-offset:4px}
+    .jar-svg{width:100%;height:auto;filter:drop-shadow(0 10px 9px rgba(100,83,62,.13))}
+    .jar-hint{text-align:center;color:#8b7a67;font-size:.88rem;margin:0 0 24px;font-style:italic}
+    .letters{display:none;animation:appear .45s ease both}
+    .letters.open{display:block}
+    @keyframes appear{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+    .section-title{text-align:center;font-size:1.45rem;font-weight:normal;margin:22px 0 7px;color:#69755f}
+    .section-note{text-align:center;color:#98846e;font-size:.9rem;margin:0 auto 22px;max-width:480px;line-height:1.6}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+    .envelope{position:relative;min-height:148px;border:1px solid #e5d3c5;border-radius:5px 5px 11px 11px;padding:15px 10px 12px;background:linear-gradient(145deg,#fffaf4,#f5e8dc);box-shadow:0 5px 12px rgba(100,75,55,.07);cursor:pointer;text-align:center;transition:transform .2s,box-shadow .2s;overflow:hidden}
+    .envelope:nth-child(3n+2){background:linear-gradient(145deg,#f8f5e9,#e8eadc);border-color:#d9dfcf}
+    .envelope:nth-child(3n){background:linear-gradient(145deg,#fff7f4,#f0dfe0);border-color:#e7cccc}
+    .envelope:before{content:"";position:absolute;top:0;left:0;right:0;height:39px;background:linear-gradient(135deg,transparent 49%,rgba(170,140,112,.10) 50%,transparent 51%);border-bottom:1px solid rgba(184,155,128,.18)}
+    .envelope:after{content:"";position:absolute;left:0;right:0;top:37px;height:35px;background:linear-gradient(35deg,transparent 49%,rgba(170,140,112,.12) 50%,transparent 51%),linear-gradient(-35deg,transparent 49%,rgba(170,140,112,.12) 50%,transparent 51%);pointer-events:none}
+    .envelope:hover{transform:translateY(-4px) rotate(-.5deg);box-shadow:var(--shadow)}
+    .seal{position:relative;z-index:1;width:31px;height:31px;margin:2px auto 8px;border-radius:50%;display:grid;place-items:center;background:#d9b2a8;color:#fffaf3;font-size:1rem;box-shadow:0 2px 4px #bda38c55}
+    .envelope:nth-child(3n+2) .seal{background:#a8b49a}.envelope:nth-child(3n) .seal{background:#c98f99}
+    .env-title{position:relative;z-index:1;display:block;font-size:.97rem;line-height:1.3;font-weight:normal}
+    .env-sub{position:relative;z-index:1;display:block;font-family:Arial,sans-serif;font-size:.69rem;letter-spacing:.04em;color:#98836e;margin-top:8px}
+    .music-wrap{display:flex;justify-content:center;margin:24px 0 4px}
+    .music-button{border:1px solid #c9d0bc;background:#eef0e6;color:#627158;border-radius:999px;padding:11px 17px;cursor:pointer;font-family:Arial,sans-serif;font-size:.86rem;box-shadow:0 3px 8px #8b96771c}
+    .music-button:hover{background:#e4e9d9}
+    .music-caption{text-align:center;color:#a08c76;font: .75rem Arial,sans-serif;margin:8px 0 0}
+    .secret-area{margin:28px auto 0;text-align:center;max-width:420px}
+    .secret-label{font: .68rem Arial,sans-serif;letter-spacing:.13em;text-transform:uppercase;color:#ad9a83;margin-bottom:10px}
+    .secret-note{border:0;background:transparent;cursor:pointer;color:#9e8971;padding:8px 12px;font-size:.88rem;opacity:.78;transition:opacity .2s,transform .2s}
+    .secret-note:hover{opacity:1;transform:rotate(-2deg)}
+    .tiny-flower{color:#c49c9a;font-size:1.1rem;margin-right:6px}
+    footer{text-align:center;margin:32px 0 0;font-size:.8rem;font-style:italic;color:#a18e79}
+    .modal{position:fixed;inset:0;z-index:10;background:rgba(61,58,48,.48);display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px)}
+    .modal.show{display:flex;animation:appear .2s ease}
+    .letter-paper{position:relative;width:min(100%,540px);max-height:min(88vh,760px);overflow:auto;padding:34px clamp(22px,6vw,44px) 30px;background:repeating-linear-gradient(to bottom,#fffaf1 0,#fffaf1 30px,#eee4d4 31px);border:1px solid #e3d2bc;box-shadow:0 22px 65px #30291e44;border-radius:3px;transform:rotate(-.3deg)}
+    .letter-paper:before{content:"";position:absolute;left:14px;top:0;bottom:0;border-left:1px solid #e6bfc0;opacity:.65}
+    .close{position:sticky;top:0;float:right;border:1px solid #e3d4c3;background:#fffaf1;border-radius:50%;width:34px;height:34px;cursor:pointer;font-family:Arial,sans-serif;font-size:1.15rem;line-height:1}
+    .letter-kicker{font: .68rem Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#a9827d;margin:7px 0 12px}
+    .letter-title{font-size:clamp(1.45rem,5vw,2rem);font-weight:normal;line-height:1.2;color:#66745c;margin:0 34px 20px 0}
+    .letter-body{font-size:1.02rem;line-height:1.9;white-space:pre-line;color:#5b584d}
+    .verse{border-left:2px solid #c9b49b;margin:22px 0 0;padding:8px 0 8px 14px;color:#86715f;font-style:italic;font-size:.94rem;line-height:1.6}
+    .letter-sign{margin:22px 0 0;text-align:right;color:#9b8173;font-style:italic}
+    .modal-nav{display:flex;justify-content:center;gap:12px;margin-top:20px}
+    .modal-nav button{border:1px solid #d9c8b2;background:#fffaf1;padding:9px 15px;border-radius:99px;cursor:pointer;font: .8rem Arial,sans-serif}
+    .modal-nav button:hover{background:#f0e8dc}
+    .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#5e6e54;color:#fffaf2;padding:11px 16px;border-radius:20px;font: .82rem Arial,sans-serif;box-shadow:var(--shadow);display:none;z-index:20;max-width:90vw;text-align:center}
+    .toast.show{display:block;animation:appear .2s ease}
+    @media(max-width:620px){.page{padding:20px 13px 32px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.envelope{min-height:142px}.jar-button{width:70%;max-width:245px}.letter-paper{padding-top:27px}.letter-body{font-size:.98rem;line-height:1.82}}
+    @media(max-width:350px){.grid{gap:7px}.envelope{padding-inline:7px}.env-title{font-size:.9rem}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div class="eyebrow">um potinho de carinho</div>
+      <h1>Abra quando precisar <span aria-hidden="true">💌</span></h1>
+      <p class="subtitle">cartinhas para os dias de todo tipo</p>
+      <div class="divider" aria-hidden="true">✿</div>
+    </header>
+
+    <section class="jar-area" aria-label="Potinho de cartas">
+      <button class="jar-button" id="openJar" aria-label="Abrir o potinho e revelar as cartas" aria-expanded="false" aria-controls="letters">
+        <svg class="jar-svg" viewBox="0 0 300 300" role="img" aria-label="Ilustração de um potinho de vidro cheio de cartinhas, flores e corações">
+          <defs>
+            <linearGradient id="glass" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".82"/><stop offset=".55" stop-color="#dce6d7" stop-opacity=".4"/><stop offset="1" stop-color="#b5c6b0" stop-opacity=".55"/></linearGradient>
+            <linearGradient id="lid" x1="0" x2="1"><stop stop-color="#c8b49b"/><stop offset=".5" stop-color="#e4d5c0"/><stop offset="1" stop-color="#bba68c"/></linearGradient>
+          </defs>
+          <ellipse cx="150" cy="268" rx="76" ry="12" fill="#c7b49b" opacity=".28"/>
+          <g transform="rotate(-13 115 142)"><rect x="70" y="88" width="75" height="118" rx="3" fill="#f0d6d0" stroke="#c9a69c" stroke-width="1.5"/><path d="M79 102 H134 M79 111 H127 M79 120 H131" stroke="#c8aaa1" stroke-width="1.2"/><path d="M108 165 q-12 -11 -19 0 q-2 12 19 23 q20 -12 18 -23 q-7 -11 -18 0" fill="#c98f99" opacity=".9"/></g>
+          <g transform="rotate(10 180 142)"><rect x="145" y="75" width="70" height="127" rx="3" fill="#e5e8d8" stroke="#b7c0a8" stroke-width="1.5"/><path d="M154 91 H206 M154 100 H199 M154 109 H204" stroke="#b1b99f" stroke-width="1.2"/><path d="M166 145 q12 -15 24 0 q-12 19 -24 0" fill="#89977c"/></g>
+          <g transform="rotate(-3 151 147)"><rect x="105" y="68" width="89" height="130" rx="3" fill="#fff7e9" stroke="#ddcbb1" stroke-width="1.5"/><path d="M116 84 H182 M116 94 H177 M116 104 H180 M116 114 H166" stroke="#d9cbb8" stroke-width="1.4"/><circle cx="151" cy="151" r="17" fill="#d8a7a5"/><path d="M151 145 q-8 -8 -13 0 q-2 8 13 17 q14 -9 13 -17 q-5 -8 -13 0" fill="#fff7ed"/></g>
+          <g><path d="M93 127 C83 143 79 176 82 220 Q84 245 110 249 L191 249 Q217 245 219 220 C222 176 217 143 207 127 Z" fill="url(#glass)" stroke="#9daf9f" stroke-width="2.5"/><ellipse cx="150" cy="129" rx="58" ry="13" fill="#d8e2d3" fill-opacity=".65" stroke="#9daf9f" stroke-width="2.5"/><path d="M91 153 Q100 145 108 154 L108 218 Q108 231 101 231 Q91 225 91 211 Z" fill="#fff" opacity=".48"/><path d="M205 158 Q211 181 206 216" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".65"/><path d="M109 238 Q150 247 192 238" fill="none" stroke="#fff" stroke-width="2" opacity=".65"/></g>
+          <g><rect x="92" y="111" width="116" height="24" rx="5" fill="url(#lid)" stroke="#b49c80" stroke-width="1.5"/><path d="M97 117 H203 M97 124 H203 M97 131 H203" stroke="#b19b80" stroke-width="1" opacity=".65"/><path d="M150 112 C142 101 128 107 139 119 L150 126 L161 119 C172 107 158 101 150 112" fill="#d4a0a0" stroke="#bd8589" stroke-width="1"/></g>
+          <g fill="#c68f99"><circle cx="86" cy="91" r="5"/><circle cx="80" cy="85" r="5"/><circle cx="92" cy="84" r="5"/><circle cx="86" cy="78" r="5"/><circle cx="86" cy="85" r="3" fill="#f5dfc0"/></g>
+          <path d="M85 96 Q78 107 74 112" stroke="#89977c" stroke-width="2" fill="none"/><path d="M74 106 q-10 -7 -11 2 q8 7 11 -2 M78 101 q1 -11 9 -7 q0 8 -9 7" fill="#a6b49a"/>
+          <g fill="#c68f99"><path d="M224 94 q-7 -8 -13 -1 q-3 8 13 18 q16 -10 13 -18 q-6 -7 -13 1"/><path d="M225 117 q-4 -5 -8 -1 q-2 5 8 11 q10 -6 8 -11 q-4 -4 -8 1" opacity=".65"/></g>
+          <g fill="#9aa88c"><path d="M63 150 l-3 -12 l11 6 Z"/><path d="M236 146 l10 -10 l-1 14 Z"/></g>
+          <g fill="#b89d7d" font-size="14"><text x="53" y="191">✦</text><text x="231" y="183">✧</text><text x="227" y="70">♡</text><text x="67" y="64">✧</text></g>
+        </svg>
+      </button>
+    </section>
+    <p class="jar-hint" id="jarHint">toque no potinho para descobrir as cartinhas ✿</p>
+
+    <section class="letters" id="letters" aria-live="polite">
+      <h2 class="section-title">Escolha uma cartinha</h2>
+      <p class="section-note">Não precisa ter um motivo especial. Abra a que combinar com o seu dia. 🌷</p>
+      <div class="grid" id="letterGrid"></div>
+      <div class="music-wrap"><button class="music-button" id="musicButton" type="button">♫ Tocar um lo-fi tranquilinho</button></div>
+      <p class="music-caption">uma musiquinha para acompanhar o momento</p>
+      <audio id="lofiAudio" loop preload="none"><source src="lofi.mp3" type="audio/mpeg"></audio>
+      <div class="secret-area">
+        <div class="secret-label">psiu… tem um bilhetinho aqui</div>
+        <button class="secret-note" id="secretButton" type="button"><span class="tiny-flower">✿</span> <span style="text-decoration:underline;text-decoration-style:dotted;text-underline-offset:4px">olha o que ficou escondidinho</span></button>
+      </div>
+    </section>
+
+    <footer>feito com carinho, papel imaginário e umas pitadas de implicância ♡</footer>
+  </main>
+
+  <div class="modal" id="letterModal" role="dialog" aria-modal="true" aria-labelledby="letterTitle">
+    <article class="letter-paper">
+      <button class="close" id="closeModal" aria-label="Fechar carta">×</button>
+      <div class="letter-kicker" id="letterKicker">uma cartinha para você</div>
+      <h2 class="letter-title" id="letterTitle"></h2>
+      <div class="letter-body" id="letterBody"></div>
+      <div class="verse" id="letterVerse" hidden></div>
+      <p class="letter-sign">com carinho, sempre no modo amizade 💚</p>
+      <div class="modal-nav"><button id="anotherLetter" type="button">Escolher outra cartinha ✿</button></div>
+    </article>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const letters = [
+      {title:'Quando achar que não está evoluindo',icon:'🌱',sub:'um passo de cada vez',body:'Oi, 0meiaa. 💌\n\nEu sei que às vezes parece que todo mundo está avançando enquanto você continua no mesmo lugar. Mas nem todo progresso faz barulho, e nem toda conquista aparece imediatamente.\n\nVocê continua aprendendo, tentando e construindo seu caminho — até nos dias em que não consegue perceber isso. Não transforme um dia difícil numa sentença sobre quem você é. Você merece paciência, inclusive a sua própria.\n\nVai no seu ritmo. Uma página, uma questão e um dia de cada vez. E fica proibido abrir um tribunal na própria cabeça às três da manhã para julgar a vida inteira, viu? KKKKK 😂\n\nSua excelência, a pigmeu, está autorizada a descansar e continuar amanhã. 💚',verse:'“Tudo tem o seu tempo determinado.” — Eclesiastes 3:1'},
+      {title:'Quando a ansiedade apertar',icon:'☁️',sub:'respira um pouquinho',body:'Ei, 0meiaa. 🌷\n\nVamos diminuir o tamanho do mundo por um instante? Você não precisa resolver tudo agora. Tenta soltar os ombros, respirar devagar e olhar só para o próximo pequeno passo.\n\nO que você está sentindo merece cuidado, não bronca. Você não é fraca por ficar ansiosa, nem incapaz por precisar de uma pausa. Se hoje estiver pesado, procure alguém de confiança e não carregue tudo sozinha.\n\nE ó: sua cabeça pode até convocar uma reunião extraordinária com 47 preocupações, mas você não é obrigada a comparecer a todas. KKKKK. Uma coisa de cada vez, combinado? 💚',verse:'“Lancem sobre ele toda a sua ansiedade, porque ele tem cuidado de vocês.” — 1 Pedro 5:7'},
+      {title:'Quando achar que não é suficiente',icon:'♡',sub:'um lembrete sincero',body:'Oi, minha querida pigmeu. 💌\n\nVocê não precisa tirar nota perfeita, dar conta de tudo, estar sempre bem ou provar seu valor a cada dia. Seu valor não depende de uma lista de tarefas concluídas.\n\nVocê é uma pessoa inteira também nos dias em que está cansada, confusa ou insegura. Espero que, aos poucos, você consiga se tratar com a mesma gentileza que oferece às pessoas de quem gosta.\n\nE se a sua mente começar com aquele papo de “não sou suficiente”, avisa que o departamento de reclamações está fechado por falta de argumentos. 😂\n\nNão precisa acreditar em tudo isso de uma vez. Só guarda essa cartinha e volta quando precisar. 💚',verse:'“Eu te louvo porque me fizeste de modo especial e admirável.” — Salmos 139:14'},
+      {title:'Quando precisar rir',icon:'😂',sub:'comunicado oficial',body:'COMUNICADO OFICIAL DO POTINHO 📣\n\nApós uma investigação rigorosa, conduzida por duas pessoas altamente suspeitas, foi constatado que a 0meiaa está precisando rir um pouquinho.\n\nA comissão de petistas, autistas (segundo as piadas internas e nada segundo um laudo, pelo amor KKKKK) e especialistas em falar besteira recomenda: beber água, soltar uma risada e não levar a própria existência tão a sério por cinco minutos.\n\nCaso os sintomas de ser uma figuraça persistam, não procure tratamento: procure seus amigos. 😂💚\n\nFim do comunicado. Favor carimbar e arquivar.'},
+      {title:'Quando o estudo parecer infinito',icon:'📚',sub:'pausa para a concurseira',body:'Oi, futura dona da aprovação. 🌿\n\nEu sei que tem matéria que parece ter sido escrita por alguém que acordou e escolheu o caos. Mas você não precisa vencer o edital inteiro hoje. Escolhe um tópico, faz algumas questões e comemora o que conseguiu aprender.\n\nUma sessão de estudo não precisa ser perfeita para ser útil. E uma pausa não apaga o esforço que você já fez.\n\nAgora vai lá, mas lembra: até o cérebro mais esforçado precisa de água, comida, sono e uns minutos olhando para o nada como se estivesse carregando uma atualização. KKKKK 😂\n\nTorcendo por você, um dia de cada vez.' ,verse:'“Não nos cansemos de fazer o bem, pois no tempo próprio colheremos.” — Gálatas 6:9'},
+      {title:'Quando precisar de coragem',icon:'🍃',sub:'força sem pressão',body:'Talvez você não esteja se sentindo corajosa hoje. Tudo bem. Coragem não é nunca sentir medo; às vezes, é continuar com cuidado mesmo sem ter certeza de tudo.\n\nVocê pode ajustar o plano, pedir ajuda, descansar e recomeçar. Isso não diminui o que você já fez.\n\nLembra do Itachi: até quem parece carregar o mundo sozinho tem uma história que ninguém vê inteira. Mas, diferente de anime, você não precisa resolver tudo no sacrifício e com trilha sonora triste. Aceita ajuda também, criatura. 💚',verse:'“Seja forte e corajoso. Não tenha medo.” — Josué 1:9'},
+      {title:'Quando achar que ninguém te aguenta',icon:'🐣',sub:'um parecer imparcial',body:'Pigmeu, vamos analisar os fatos. 🧐\n\nSim, às vezes você pode ser teimosa. Talvez um pouquinho dramática. Quem sabe até insuportável por aproximadamente 4 minutos e 32 segundos. KKKKK.\n\nMas isso não resume você. Você também é alguém que tem sentimentos, se esforça, se importa e merece amizade de verdade — não só nos dias em que está engraçada ou animada.\n\nVocê não precisa estar sempre bem para ser querida. E, se algum dia essa sensação de ser um peso ficar insistente, conversa com alguém em quem confia. Não precisa enfrentar esse pensamento sozinha. 💚'},
+      {title:'Quando precisar de um abraço',icon:'🧸',sub:'um cantinho tranquilo',body:'Imagina um abraço bem quentinho, daqueles que não exigem explicação nem pedem que você melhore rapidinho. Só um abraço que diz: “pode descansar um pouco”.\n\nSe hoje você não tiver palavras, tudo bem. Se precisar chorar, tudo bem também. Você não precisa transformar cada sentimento numa lição ou numa solução.\n\nLembra do Pooh e do Leitão: às vezes, estar junto já é uma forma bonita de cuidar. Que você encontre pessoas com quem possa ser você mesma, sem precisar fingir que está tudo certo. 🧸💚',verse:'“Em todo tempo ama o amigo.” — Provérbios 17:17'},
+      {title:'Quando o dia der tudo errado',icon:'🌧️',sub:'um dia não é a vida toda',body:'Oi, 0meiaa. 💌\n\nTem dias que parecem uma sequência de pequenas inconveniências organizadas por um inimigo pessoal. Você tenta uma coisa, dá errado; tenta outra, dá errado com criatividade.\n\nSe hoje foi assim, você tem permissão para encerrar o expediente emocional. Come alguma coisa, toma água, toma um banho ou faz algo simples que te traga conforto. Amanhã você decide o próximo passo.\n\nNão precisa tirar uma conclusão definitiva sobre sua vida com base numa terça-feira duvidosa. KKKKK 😂🌷',verse:'“O choro pode durar uma noite, mas a alegria vem pela manhã.” — Salmos 30:5'},
+      {title:'Quando precisar lembrar de Deus',icon:'✝️',sub:'fé com calma',body:'Que você encontre um pouquinho de paz em lembrar que não precisa enxergar o caminho inteiro para dar o próximo passo. Você pode orar com palavras bonitas ou só com um suspiro cansado. Não precisa esconder de Deus a parte de você que está com medo.\n\nQue a sua fé seja um lugar de descanso, não mais uma cobrança. E que você se lembre de que pedir ajuda, cuidar de si e fazer pausas também são coisas boas. 💚',verse:'“Perto está o Senhor dos que têm o coração quebrantado.” — Salmos 34:18'},
+      {title:'Quando conquistar algo',icon:'🎉',sub:'comemore, criatura!',body:'PARA TUDO! 📣\n\nSe você abriu esta carta porque conquistou alguma coisa — grande, pequena ou que só você sabe o quanto custou —, este potinho exige uma comemoração.\n\nNão diminua sua vitória só porque ainda existe outra meta esperando. Você pode ficar feliz pelo que conquistou e continuar sonhando com o que vem depois. Uma coisa não anula a outra.\n\nAgora aceita os parabéns, respira fundo e registra esse momento. E se você tentar falar “ah, nem foi tudo isso”, a comissão do potinho vai confiscar sua carteirinha de humilde por 24 horas. KKKKKK 🥳💚',verse:'“Alegrem-se sempre no Senhor.” — Filipenses 4:4'},
+      {title:'Quando precisar desacelerar',icon:'🍵',sub:'não é corrida',body:'Pequeno lembrete artesanal: você é uma pessoa, não uma máquina de cumprir metas. 🌿\n\nDescansar não é desistir. Ter um ritmo diferente não é fracassar. E você não precisa transformar todo minuto livre em produtividade.\n\nHoje, tenta fazer uma coisa de cada vez. Se puder, deixa o celular de lado por alguns minutos, alonga o corpo e toma uma água ou um chá.\n\nA urgência que sua mente sente nem sempre significa que tudo precisa ser resolvido agora. Até a Alice precisava parar para entender o País das Maravilhas — e olha a confusão em que ela se meteu. 😂'},
+      {title:'Quando quiser desistir de tudo',icon:'🌻',sub:'só mais um instante',body:'Eu não vou te dizer que basta pensar positivo e tudo vai ficar fácil, porque sei que não é assim. Só quero te lembrar que você não precisa decidir o futuro inteiro no meio de um momento difícil.\n\nSe estiver no limite, diminui o ritmo, conversa com alguém de confiança e olha para o que é possível fazer hoje — talvez só descansar. Mudar de estratégia também pode ser coragem.\n\nVocê merece apoio enquanto tenta descobrir o caminho, não só aplausos quando chega ao destino. Um passo pequeno ainda é um passo. 💚',verse:'“A minha graça te basta, porque o meu poder se aperfeiçoa na fraqueza.” — 2 Coríntios 12:9'},
+      {title:'Quando precisar de uma distração',icon:'🐇',sub:'siga o coelho… ou não',body:'Missão do dia: encontrar uma coisa pequena que não tenha nada a ver com concurso.\n\nPode ser ouvir uma música, ver um vídeo bobo, caminhar um pouco, brincar com alguma coisa ou simplesmente observar o mundo sem tentar memorizar um artigo de lei no processo.\n\nA Alice seguiu um coelho e foi parar num lugar completamente maluco. Você pode seguir um coelho imaginário por cinco minutos, mas depois volta para a realidade, tá? O edital não vai estudar sozinho. KKKKK 🐇📚\n\nDescansar a cabeça também faz parte de cuidar de você.'},
+      {title:'Quando quiser lembrar que é querida',icon:'🌷',sub:'sem precisar merecer',body:'Oi, 0meiaa. 💚\n\nQue você nunca pense que precisa estar sempre alegre, disponível, engraçada ou com tudo resolvido para merecer carinho. Você pode aparecer num dia esquisito, falar pouco, estar cansada ou não saber explicar o que sente.\n\nUma amizade bonita também tem espaço para os dias silenciosos. Espero que você encontre cuidado nas pequenas coisas e pessoas que te escutem sem transformar tudo numa competição de quem sofre mais.\n\nE, claro, continua sendo essa figura aí, porque alguém precisa manter o nível de caos do grupo. KKKKK. Mas falando sério: que bom que você existe. 🌷'},
+      {title:'Quando precisar de uma faísca',icon:'✨',sub:'um bilhete de esperança',body:'Talvez você ainda não esteja onde gostaria. Mas isso não quer dizer que ficará para sempre onde está. Você pode aprender, mudar de ideia, tentar de outro jeito e crescer sem precisar se comparar com o relógio de ninguém.\n\nNão precisa ter certeza de tudo para continuar. Às vezes, esperança é só deixar uma pequena fresta aberta para a possibilidade de que as coisas melhorem.\n\nGuarda esta faísca para os dias nublados. E se ela apagar um pouquinho, tudo bem: você pode pedir ajuda para acendê-la de novo. 💚',verse:'“Os que semeiam com lágrimas colherão com alegria.” — Salmos 126:5'}
+    ];
+
+    const secretLetter = {title:'Um bilhetinho que era para você encontrar',icon:'✿',body:'Oi, 0meiaa. 💌\n\nSe você encontrou este bilhetinho, parabéns: sua curiosidade acaba de ganhar um prêmio imaginário e um selo oficial de fuçadora profissional. KKKKK.\n\nAgora, falando com carinho: espero que este potinho seja um lugarzinho bom para voltar quando o dia estiver pesado, quando você quiser rir ou quando precisar lembrar que não tem que dar conta de tudo sozinha.\n\nQue você tenha coragem para continuar, gentileza consigo mesma para descansar e pessoas por perto com quem possa dividir tanto as vitórias quanto as dúvidas.\n\nE que, no meio dos estudos, dos planos e das preocupações, você nunca se esqueça de viver as pequenas coisas também. Você merece dias leves, amizades sinceras e motivos para sorrir que não dependam de uma aprovação.\n\nPronto, acabou a parte sentimental. Pode voltar a ser insuportável agora, pigmeu. KKKKKKK 😂💚\n\nCuida de você, viu?';verse:'“O amigo ama em todos os momentos.” — Provérbios 17:17'};
+
+    const grid = document.getElementById('letterGrid');
+    const modal = document.getElementById('letterModal');
+    const toast = document.getElementById('toast');
+    let toastTimer;
+    let lastFocus = null;
+
+    function showToast(message){toast.textContent=message;toast.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('show'),3200)}
+    function renderCards(){
+      letters.forEach((letter,index)=>{
+        const button=document.createElement('button');button.type='button';button.className='envelope';
+        button.innerHTML=`<span class="seal" aria-hidden="true">${letter.icon}</span><span class="env-title">${letter.title}</span><span class="env-sub">${letter.sub}</span>`;
+        button.addEventListener('click',()=>openLetter(letter,index+1));grid.appendChild(button);
+      });
+    }
+    function openLetter(letter,index){
+      lastFocus=document.activeElement;
+      document.getElementById('letterKicker').textContent=index=== 'secret'?'um segredo sem senha':'cartinha '+String(index).padStart(2,'0')+' · feita com carinho';
+      document.getElementById('letterTitle').textContent=letter.title;
+      document.getElementById('letterBody').textContent=letter.body;
+      const verse=document.getElementById('letterVerse');
+      if(letter.verse){verse.textContent=letter.verse;verse.hidden=false}else{verse.hidden=true;verse.textContent=''}
+      modal.classList.add('show');document.body.style.overflow='hidden';document.getElementById('closeModal').focus();
+    }
+    function closeLetter(){modal.classList.remove('show');document.body.style.overflow='';if(lastFocus&&lastFocus.focus)lastFocus.focus()}
+    renderCards();
+    document.getElementById('openJar').addEventListener('click',()=>{
+      const section=document.getElementById('letters');section.classList.add('open');
+      document.getElementById('openJar').setAttribute('aria-expanded','true');
+      document.getElementById('jarHint').textContent='escolha um envelope; o que você precisa hoje? ✿';
+      section.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+    document.getElementById('closeModal').addEventListener('click',closeLetter);
+    document.getElementById('anotherLetter').addEventListener('click',()=>{closeLetter();document.getElementById('letters').scrollIntoView({behavior:'smooth',block:'start'})});
+    modal.addEventListener('click',event=>{if(event.target===modal)closeLetter()});
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&modal.classList.contains('show'))closeLetter()});
+    document.getElementById('secretButton').addEventListener('click',()=>openLetter(secretLetter,'secret'));
+
+    const audio=document.getElementById('lofiAudio');const musicButton=document.getElementById('musicButton');
+    musicButton.addEventListener('click',async()=>{
+      if(!audio.paused){audio.pause();musicButton.textContent='♫ Tocar um lo-fi tranquilinho';return}
+      try{await audio.play();musicButton.textContent='Ⅱ Pausar a musiquinha'}catch(error){showToast('Para tocar a música, coloque um arquivo chamado lofi.mp3 junto do index.html no GitHub. 💚')}
+    });
+    audio.addEventListener('ended',()=>musicButton.textContent='♫ Tocar um lo-fi tranquilinho');
+    audio.addEventListener('pause',()=>musicButton.textContent='♫ Tocar um lo-fi tranquilinho');
+    audio.addEventListener('play',()=>musicButton.textContent='Ⅱ Pausar a musiquinha');
+  </script>
+</body>
+</html>
